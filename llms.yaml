@@ -1,0 +1,14 @@
+groups:
+  local:
+    - name: llama3.1-8b
+      id: llama3.1:8b
+
+    - name: mistral-latest
+      id: mistral:latest
+
+    - name: qwen3-8b
+      id: qwen3:8b
+
+  fv-azure:
+    - name: gpt-5.2
+      id: gpt-5.2

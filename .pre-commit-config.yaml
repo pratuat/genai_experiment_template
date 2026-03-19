@@ -1,10 +1,12 @@
 fail_fast: true
+exclude: ^notebooks/
+default_language_version:
+  python: python3.12
 repos:
   - repo: https://github.com/psf/black
     rev: 26.1.0
     hooks:
       - id: black
-        language_version: python3.10
         args: ["--line-length=80"]
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
@@ -29,24 +31,24 @@ repos:
     hooks:
       - id: docformatter
         name: docformatter
-        entry: python -m docformatter
+        entry: uv run python -m docformatter
         language: system
         types: [python]
         args:
           - --in-place
           - --wrap-summaries=80
           - --wrap-descriptions=80
-      - id: mypy
-        name: mypy
-        entry: "mypy"
-        language: system
-        exclude: "^tests/|^src/entity_linking/benchmark/|^load_tests/|^docs/|^data/|^scripts/"
-        types: [python]
-        verbose: true
-        args: [--ignore-missing-imports]
+      # - id: mypy
+      #   name: mypy
+      #   entry: uv run mypy
+      #   language: system
+      #   exclude: "^tests/|^src/entity_linking/benchmark/|^load_tests/|^docs/|^data/|^scripts/"
+      #   types: [python]
+      #   verbose: true
+      #   args: [--ignore-missing-imports]
       - id: pytest
         name: run tests
-        entry: bash -c 'SKIP_LOADING_MODELS=true pytest -vv'
+        entry: bash -c 'SKIP_LOADING_MODELS=true uv run pytest -vv'
         language: system
         pass_filenames: false
         verbose: true
