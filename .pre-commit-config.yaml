@@ -1,0 +1,52 @@
+fail_fast: true
+repos:
+  - repo: https://github.com/psf/black
+    rev: 26.1.0
+    hooks:
+      - id: black
+        language_version: python3.10
+        args: ["--line-length=80"]
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        args: ["--exclude=tests/", "--max-line-length=80"]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.14
+    hooks:
+      - id: ruff
+        args:
+          - --fix
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.3.0 # pick a git hash / tag to point to
+    hooks:
+      - id: pydocstyle
+        exclude: "^tests/|^src/entity_linking/benchmark/|^load_tests/|^docs/|^data/"
+        args:
+          - --ignore=D101,D105,D203,D213,D401,D406,D407,D413
+          - --ignore-decorators
+  - repo: local
+    hooks:
+      - id: docformatter
+        name: docformatter
+        entry: python -m docformatter
+        language: system
+        types: [python]
+        args:
+          - --in-place
+          - --wrap-summaries=80
+          - --wrap-descriptions=80
+      - id: mypy
+        name: mypy
+        entry: "mypy"
+        language: system
+        exclude: "^tests/|^src/entity_linking/benchmark/|^load_tests/|^docs/|^data/|^scripts/"
+        types: [python]
+        verbose: true
+        args: [--ignore-missing-imports]
+      - id: pytest
+        name: run tests
+        entry: bash -c 'SKIP_LOADING_MODELS=true pytest -vv'
+        language: system
+        pass_filenames: false
+        verbose: true
